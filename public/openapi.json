@@ -1,0 +1,171 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Agent Orchestrator API",
+    "description": "REST APIs for AI agents (Pricing, Shopping, Recommendation) designed to be integrated into MCP hosts like HasMCP.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Local development server"
+    }
+  ],
+  "paths": {
+    "/api/agents/pricing": {
+      "post": {
+        "summary": "Pricing Agent",
+        "description": "Simulates pricing intelligence lookup to retrieve item prices based on user query.",
+        "operationId": "pricingAgent",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "input": {
+                    "type": "string",
+                    "description": "User prompt/query regarding the product/laptop brand."
+                  }
+                },
+                "required": ["input"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved pricing info.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "laptop": { "type": "string" },
+                    "price": { "type": "number" },
+                    "currency": { "type": "string" },
+                    "message": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/agents/shopping": {
+      "post": {
+        "summary": "Shopping Agent",
+        "description": "Searches for matching products based on user intent (gaming, business, etc.).",
+        "operationId": "shoppingAgent",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "input": {
+                    "type": "string",
+                    "description": "Search query describing what user wants to buy."
+                  }
+                },
+                "required": ["input"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully found matching products.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "query": { "type": "string" },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": { "type": "string" },
+                          "brand": { "type": "string" },
+                          "rating": { "type": "number" }
+                        }
+                      }
+                    },
+                    "count": { "type": "integer" },
+                    "timestamp": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/agents/recommendation": {
+      "post": {
+        "summary": "Recommendation Agent",
+        "description": "Ranks products and generates score-based recommendations.",
+        "operationId": "recommendationAgent",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "input": {
+                    "type": "object",
+                    "description": "Input object (usually output from the shopping agent containing products list)."
+                  }
+                },
+                "required": ["input"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully calculated recommendations.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "recommendations": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": { "type": "string" },
+                          "score": { "type": "number" },
+                          "reason": { "type": "string" }
+                        }
+                      }
+                    },
+                    "bestChoice": {
+                      "type": "object",
+                      "properties": {
+                        "name": { "type": "string" },
+                        "score": { "type": "number" },
+                        "reason": { "type": "string" }
+                      }
+                    },
+                    "recommendationDate": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
